@@ -111,6 +111,16 @@ impl<const N: usize> Vector<N> {
         }
     }
 
+    #[inline]
+    pub fn apply<F>(&self, fun: F) -> Self
+    where
+        F: Fn(f64) -> f64, // 'F' must be a function/closure that takes an f64 and returns an f64
+    {
+        Vector {
+            components: std::array::from_fn(|i| fun(self.components[i])),
+        }
+    }
+
     /// Returns the component at a specific index.
     #[inline]
     pub fn component(&self, index: usize) -> f64 {
