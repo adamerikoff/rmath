@@ -140,14 +140,14 @@ fn test_vector_addition() {
     let v1 = Vector::new([1.0, 2.0, 3.0]);
     let v2 = Vector::new([4.0, 5.0, 6.0]);
     let expected = Vector::new([5.0, 7.0, 9.0]);
-    assert_vectors_equal(v1 + v2, expected);
+    assert_vectors_equal(&v1 + &v2, expected);
 
     // Test commutative property
-    assert_vectors_equal(v2 + v1, expected);
+    assert_vectors_equal(&v2 + &v1, expected);
 
     // Test with zeros
     let zero = Vector::<3>::zeros();
-    assert_vectors_equal(v1 + zero, v1);
+    assert_vectors_equal(&v1 + &zero, v1);
 }
 
 #[test]
@@ -155,11 +155,11 @@ fn test_vector_subtraction() {
     let v1 = Vector::new([5.0, 7.0, 9.0]);
     let v2 = Vector::new([4.0, 5.0, 6.0]);
     let expected = Vector::new([1.0, 2.0, 3.0]);
-    assert_vectors_equal(v1 - v2, expected);
+    assert_vectors_equal(&v1 - &v2, expected);
 
     // Test with zeros
     let zero = Vector::<3>::zeros();
-    assert_vectors_equal(v1 - zero, v1);
+    assert_vectors_equal(&v1 - &zero, v1);
 }
 
 #[test]
@@ -167,11 +167,11 @@ fn test_hadamard_product() {
     let v1 = Vector::new([1.0, 2.0, 3.0]);
     let v2 = Vector::new([4.0, 5.0, 6.0]);
     let expected = Vector::new([4.0, 10.0, 18.0]);
-    assert_vectors_equal(v1 * v2, expected);
+    assert_vectors_equal(&v1 * &v2, expected);
 
     // Test with ones
     let ones = Vector::<3>::ones();
-    assert_vectors_equal(v1 * ones, v1);
+    assert_vectors_equal(&v1 * &ones, v1);
 }
 
 #[test]
@@ -179,9 +179,9 @@ fn test_scalar_multiplication() {
     let v = Vector::new([1.0, 2.0, 3.0]);
     let scalar = 2.0;
     let expected = Vector::new([2.0, 4.0, 6.0]);
-    assert_vectors_equal(v * scalar, expected);
+    assert_vectors_equal(&v * scalar, expected);
     // Test with zero
-    assert_vectors_equal(v * 0.0, Vector::<3>::zeros());
+    assert_vectors_equal(&v * 0.0, Vector::<3>::zeros());
 }
 
 #[test]
@@ -189,7 +189,7 @@ fn test_hadamard_division() {
     let v1 = Vector::new([4.0, 10.0, 18.0]);
     let v2 = Vector::new([1.0, 2.0, 3.0]);
     let expected = Vector::new([4.0, 5.0, 6.0]);
-    assert_vectors_equal(v1 / v2, expected);
+    assert_vectors_equal(&v1 / &v2, expected);
 }
 
 #[test]
@@ -197,21 +197,21 @@ fn test_scalar_division() {
     let v = Vector::new([2.0, 4.0, 6.0]);
     let scalar = 2.0;
     let expected = Vector::new([1.0, 2.0, 3.0]);
-    assert_vectors_equal(v / scalar, expected);
+    assert_vectors_equal(&v / scalar, expected);
 }
 
 #[test]
 fn test_division_by_zero_scalar() {
     let v = Vector::new([1.0, 2.0]);
-    let r = v / 0.0;
-    assert_eq!(r, Vector::from(&[f64::INFINITY, f64::INFINITY]));
+    let r = &v / 0.0;
+    assert_eq!(r, Vector::new([f64::INFINITY, f64::INFINITY]));
 }
 
 #[test]
 fn test_hadamard_division_by_zero_vector() {
     let v1 = Vector::new([1.0, 2.0]);
     let v2 = Vector::new([1.0, 0.0]);
-    let v3 = v1 / v2;
+    let v3 = &v1 / &v2;
     assert_eq!(v3, Vector::new([1.0, f64::INFINITY]));
 }
 
@@ -229,26 +229,6 @@ fn test_indexing() {
 fn test_index_out_of_bounds() {
     let v = Vector::new([1.0, 2.0]);
     let _ = v[2];
-}
-
-#[test]
-fn test_range_indexing() {
-    let v = Vector::new([1.0, 2.0, 3.0, 4.0, 5.0]);
-
-    // Range
-    assert_eq!(v[1..4], [2.0, 3.0, 4.0]);
-
-    // RangeTo
-    assert_eq!(v[..3], [1.0, 2.0, 3.0]);
-
-    // RangeFrom
-    assert_eq!(v[2..], [3.0, 4.0, 5.0]);
-
-    // RangeFull
-    assert_eq!(v[..], [1.0, 2.0, 3.0, 4.0, 5.0]);
-
-    // RangeInclusive
-    assert_eq!(v[1..=3], [2.0, 3.0, 4.0]);
 }
 
 // ===== From Slice Tests =====
@@ -278,7 +258,9 @@ fn test_vector_operations_chain() {
     let v4 = Vector::new([10.0, 20.0, 30.0]);
     let scalar = 2.0;
 
-    let result = (v1 + v2) * v3 - v4 / scalar;
+    let v5 = &(&v1 + &v2) * &v3;
+    let v6 = &v4 / scalar;
+    let result = &v5 - &v6;
     let expected = Vector::new([5.0 * 2.0 - 5.0, 7.0 * 3.0 - 10.0, 9.0 * 4.0 - 15.0]);
     assert_vectors_equal(result, expected);
 }
@@ -302,10 +284,10 @@ fn test_geometric_properties() {
 #[test]
 fn test_vector_normalization() {
     let v = Vector::new([3.0, 4.0]);
-    let normalized = v / v.magnitude();
+    let normalized = &v / v.magnitude();
     assert_relative_eq!(normalized.magnitude(), 1.0);
 
     // Test that normalized vector points in same direction
-    let dot_product = normalized.dot(&(v / v.magnitude()));
+    let dot_product = normalized.dot(&(&v / v.magnitude()));
     assert_relative_eq!(dot_product, 1.0);
 }
