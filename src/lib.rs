@@ -1,6 +1,4 @@
-pub mod vector;
-pub mod matrix;
+pub mod core;
 
-pub use vector::Vector;
-pub use matrix::Matrix;
+pub use core::Matrix;
 

@@ -1,0 +1,9 @@
+Specialized Operations:
+
+Eigenvalues and Eigenvectors: A special pair of values and vectors for a square matrix. When a matrix is multiplied by its eigenvector, the result is the same as the eigenvector being scaled by its eigenvalue.
+
+LU Decomposition: A method of factoring a matrix into a lower triangular matrix (L), an upper triangular matrix (U), and a permutation matrix (P) such that PA=LU.
+
+QR Decomposition: A factorization of a matrix into an orthogonal matrix (Q) and an upper triangular matrix (R).
+
+Singular Value Decomposition (SVD): A powerful factorization of any matrix into three matrices: U, Σ, and V T

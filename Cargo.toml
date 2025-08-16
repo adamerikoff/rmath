@@ -1,7 +1,9 @@
 [package]
-name = "rmath"
+name = "nelab"
 version = "0.1.0"
 edition = "2024"
+readme = "README.md"
+documentation = "https://docs.rs/nelab"
 
 [dependencies]
 approx = "0.5.1"
